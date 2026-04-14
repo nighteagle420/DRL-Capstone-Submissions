@@ -16,7 +16,7 @@ OBS_RAW = 18
 PREV_ACT_DIM = 5
 OBS_DIM = OBS_RAW + PREV_ACT_DIM
 
-save_dir = ".newcheckpoints_r2d2_full"
+save_dir = ".newcheckpoints_vegatach_full"
 os.makedirs(save_dir, exist_ok=True)
 
 
@@ -433,8 +433,8 @@ def main():
     optimizer = optim.Adam(q_net.parameters(), lr=args.lr, eps=1e-5)
     replay = EpisodeReplay(args.max_replay_episodes, args.seq_len, args.burn_in)
 
-    train_log = "newtrain_log_r2d2_full.csv"
-    eval_log = "neweval_log_r2d2_full.csv"
+    train_log = "newtrain_log_vegatach_full.csv"
+    eval_log = "neweval_log_vegatach_full.csv"
     with open(train_log, "w", newline="") as f:
         csv.writer(f).writerow([
             "episode", "return", "ep_length", "epsilon",
@@ -454,7 +454,7 @@ def main():
     update_count = 0
     current_stage = 0
 
-    pbar = tqdm(range(args.episodes), desc="R2D2 Curriculum")
+    pbar = tqdm(range(args.episodes), desc="vegatach Curriculum")
 
     for ep in pbar:
         while current_stage < len(stage_boundaries) - 1 and ep >= stage_boundaries[current_stage]:
@@ -485,7 +485,7 @@ def main():
                 if update_count % args.target_sync == 0:
                     tgt_net.load_state_dict(q_net.state_dict())
 
-        pbar.set_description(f"R2D2 S{current_stage+1}:{stage['label']}")
+        pbar.set_description(f"vegatach S{current_stage+1}:{stage['label']}")
         tqdm.write(
             f"[ep {ep+1}] s={current_stage+1} d={difficulty} wall={int(wall_obstacles)} "
             f"ret={ep_return:.0f} len={ep_data.length} eps={epsilon:.3f} "
@@ -514,7 +514,7 @@ def main():
 
             if overall_mean > best_eval:
                 best_eval = overall_mean
-                torch.save(q_net.state_dict(), os.path.join(save_dir, f"best_r2d2_full{ep+1}.pth"))
+                torch.save(q_net.state_dict(), os.path.join(save_dir, f"best_vegatach_full{ep+1}.pth"))
                 tqdm.write(f"  *** New best: {best_eval:.1f} ***")
 
             with open(eval_log, "a", newline="") as f:
@@ -531,7 +531,7 @@ def main():
         if (ep + 1) % 500 == 0:
             torch.save(q_net.state_dict(), os.path.join(save_dir, f"ckpt_ep{ep+1}.pth"))
 
-    torch.save(q_net.state_dict(), os.path.join(save_dir, "final_r2d2_full.pth"))
+    torch.save(q_net.state_dict(), os.path.join(save_dir, "final_vegatach_full.pth"))
     print("Done.")
 
 

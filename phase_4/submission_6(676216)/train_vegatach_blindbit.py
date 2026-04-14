@@ -17,7 +17,7 @@ PREV_ACT_DIM = 5
 BLIND_DIM = 1
 OBS_DIM = OBS_RAW + PREV_ACT_DIM + BLIND_DIM
 
-save_dir = ".ckpt_r2d2_blind"
+save_dir = ".ckpt_vegatach_blind"
 os.makedirs(save_dir, exist_ok=True)
 
 
@@ -437,7 +437,7 @@ def main():
     best_eval = -float("inf")
     update_count = 0
 
-    pbar = tqdm(range(args.episodes), desc="R2D2+Blind")
+    pbar = tqdm(range(args.episodes), desc="vegatach+Blind")
 
     for ep in pbar:
         frac = min(1.0, ep / args.eps_decay_episodes)

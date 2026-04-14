@@ -16,7 +16,7 @@ OBS_RAW = 18
 PREV_ACT_DIM = 5
 OBS_DIM = OBS_RAW + PREV_ACT_DIM
 
-save_dir = ".newcheckpoints_r2d2_full"
+save_dir = ".newcheckpoints_vegatach_full"
 os.makedirs(save_dir, exist_ok=True)
 
 
@@ -422,8 +422,8 @@ def main():
     optimizer = optim.Adam(q_net.parameters(), lr=args.lr, eps=1e-5)
     replay = EpisodeReplay(args.max_replay_episodes, args.seq_len, args.burn_in)
 
-    train_log = "newtrain_log_r2d2_full.csv"
-    eval_log = "neweval_log_r2d2_full.csv"
+    train_log = "newtrain_log_vegatach_full.csv"
+    eval_log = "neweval_log_vegatach_full.csv"
     with open(train_log, "w", newline="") as f:
         csv.writer(f).writerow([
             "episode", "return", "ep_length", "epsilon",
@@ -441,7 +441,7 @@ def main():
     best_eval = -float("inf")
     update_count = 0
 
-    pbar = tqdm(range(args.episodes), desc="R2D2 Full")
+    pbar = tqdm(range(args.episodes), desc="vegatach Full")
 
     for ep in pbar:
         frac = min(1.0, ep / args.eps_decay_episodes)
@@ -486,7 +486,7 @@ def main():
 
             if overall_mean > best_eval:
                 best_eval = overall_mean
-                torch.save(q_net.state_dict(), os.path.join(save_dir, "best_r2d2_full.pth"))
+                torch.save(q_net.state_dict(), os.path.join(save_dir, "best_vegatach_full.pth"))
                 tqdm.write(f"  *** New best: {best_eval:.1f} ***")
 
             with open(eval_log, "a", newline="") as f:
@@ -503,7 +503,7 @@ def main():
         if (ep + 1) % 500 == 0:
             torch.save(q_net.state_dict(), os.path.join(save_dir, f"ckpt_ep{ep+1}.pth"))
 
-    torch.save(q_net.state_dict(), os.path.join(save_dir, "final_r2d2_full.pth"))
+    torch.save(q_net.state_dict(), os.path.join(save_dir, "final_vegatach_full.pth"))
     print("Done.")
 
 
